@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas DFA - Asmii</title>
+    <style>
+        :root { --primary: #6366f1; --dark: #0f172a; --card-dark: #111827; --card-white: #ffffff; --text-muted: #94a3b8; --border: #e2e8f0; --border-dark: #334155; }
+        * { margin: 0; padding: 0; box-shadow: none; outline: none; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        body { background: #f8fafc; color: #1e293b; display: flex; justify-content: center; padding: 20px; }
+        .container { width: 100%; max-width: 480px; }
+        header { text-align: center; margin-bottom: 25px; }
+        .badge { background: var(--dark); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.7em; margin-bottom: 15px; display: inline-block; }
+        
+        /* TABS NAVIGASI */
+        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 25px; }
+        .tab-btn { flex: 1; padding: 15px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600; text-align: center; transition: 0.2s; }
+        .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); margin-bottom: -3px; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* CARD SYSTEM */
+        .card { border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+        .card-dark { background: var(--card-dark); color: #e2e8f0; border: 1px solid var(--border-dark); }
+        .card-white { background: var(--card-white); color: #1e293b; }
+        
+        /* JUDUL KOTAK */
+        .card-title-prefix { color: var(--primary); font-weight: bold; margin-right: 5px; }
+        .card-label { font-size: 0.75em; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; }
+        .card-label::before { content: ""; display: inline-block; width: 4px; height: 18px; background: var(--primary); border-radius: 4px; margin-right: 10px; }
+
+        .specs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .spec-box { background: var(--dark); color: #e2e8f0; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-dark); font-family: monospace; font-size: 0.85em; }
+
+        /* DIAGRAM BOX */
+        .diag-box { text-align: center; background: #f8fafc; padding: 10px; border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); }
+        .node { fill: white; stroke: #4a5568; stroke-width: 2; transition: 0.4s; }
+        .final-node { fill: none; stroke: #4a5568; stroke-width: 1; }
+        .active-node { fill: #fbbf24 !important; stroke: #d97706 !important; filter: drop-shadow(0 0 10px #fbbf24); }
+        .label { fill: #1e293b; font-weight: bold; text-anchor: middle; font-size: 14px; pointer-events: none; }
+
+        /* TABLE SYSTEM */
+        .table-container { overflow-x: auto; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+        th { background: #1e293b; color: white; padding: 12px 10px; text-align: left; }
+        td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; font-weight: 500; }
+        
+        /* TAGS */
+        .tag { font-size: 0.75em; padding: 3px 10px; border-radius: 6px; font-weight: bold; margin-left: 10px; display: inline-flex; align-items: center; }
+        .start { background: #e0e7ff; color: #4338ca; }
+        .final { background: #dcfce7; color: #15803d; }
+
+        /* SIMULASI */
+        .sim-input-group { display: flex; gap: 10px; margin-top: 10px; }
+        input { flex: 1; padding: 15px; border-radius: 10px; border: 1px solid var(--border-dark); background: var(--dark); color: white; font-size: 1em; }
+        input:focus { border-color: var(--primary); }
+        button { background: var(--primary); color: white; border: none; padding: 0 30px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1em; }
+        button:hover { background: #4f46e5; }
+        .status { margin-top: 15px; padding: 15px; background: var(--dark); border-radius: 10px; text-align: center; font-size: 0.9em; border: 1px dashed var(--border-dark); color: var(--text-muted); font-weight: 600; min-height: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="badge">TEORI BAHASA & AUTOMATA</div>
+            <p>Nama: <strong>Hasmiranti Dewi Pratiwi A</strong> | NIM: <strong>151</strong></p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="shTab(event, 's1')">Soal 1</button>
+            <button class="tab-btn" onclick="shTab(event, 's2')">Soal 2</button>
+            <button class="tab-btn" onclick="shTab(event, 's3')">Soal 3</button>
+        </div>
+
+        <div id="s1" class="tab-content active">
+            <div class="card card-dark">
+                <h3>Soal 1. Buatlah tabel transisi dari Deterministic Finite Automata berikut.</h3>
+                <div class="specs">
+                    <div class="spec-box">Q = {q₀, q₁, q₂, q₃}</div>
+                    <div class="spec-box">Σ = {0, 1}</div>
+                    <div class="spec-box">S = q₀</div>
+                    <div class="spec-box">F = {q₀}</div>
+                </div>
+            </div>
+            
+            <div class="card card-white">
+                <div class="card-label">DIAGRAM TRANSISI (SOAL)</div>
+                <div class="diag-box">
+                    <svg viewBox="0 0 400 240" width="100%">
+                        <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4a5568" /></marker></defs>
+                        <path d="M 125 70 L 275 70" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <path d="M 275 90 L 125 90" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <path d="M 100 95 L 100 165" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <path d="M 120 165 L 120 95" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <path d="M 280 95 L 280 165" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <path d="M 300 165 L 300 95" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <path d="M 125 180 L 275 180" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <path d="M 275 200 L 125 200" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <path d="M 50 70 L 70 70" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
+                        <circle id="n1-q0" cx="100" cy="70" r="25" class="node" /><circle cx="100" cy="70" r="21" class="final-node" />
+                        <text x="100" y="75" class="label">q₀</text>
+                        <circle id="n1-q1" cx="300" cy="70" r="25" class="node" /><text x="300" y="75" class="label">q₁</text>
+                        <circle id="n1-q2" cx="100" cy="190" r="25" class="node" /><text x="100" y="195" class="label">q₂</text>
+                        <circle id="n1-q3" cx="300" cy="190" r="25" class="node" /><text x="300" y="195" class="label">q₃</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="card card-white">
+                <div class="card-label">TABEL TRANSISI (JAWABAN)</div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>δ</th><th>0</th><th>1</th></tr></thead>
+                        <tbody>
+                            <tr><td>→ q₀ <span class="tag start">start</span> <span class="tag final">final</span></td><td>q₂</td><td>q₁</td></tr>
+                            <tr><td>q₁</td><td>q₃</td><td>q₀</td></tr>
+                            <tr><td>q₂</td><td>q₀</td><td>q₃</td></tr>
+                            <tr><td>q₃</td><td>q₁</td><td>q₂</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card card-dark">
+                <div class="sim-input-group">
+                    <input type="text" id="in1" placeholder="Masukkan string 0/1...">
+                    <button onclick="sim(1)">Mulai</button>
+                </div>
+                <div id="st1" class="status">Status: Menunggu Input...</div>
+            </div>
+        </div>
+
+        <div id="s2" class="tab-content"><div class="card-dark card"><h3>Isi Soal 2...</h3></div></div>
+        <div id="s3" class="tab-content"><div class="card-dark card"><h3>Isi Soal 3...</h3></div></div>
+    </div>
+
+    <script>
+        const cf1 = {q0:{'0':'q2','1':'q1'},q1:{'0':'q3','1':'q0'},q2:{'0':'q0','1':'q3'},q3:{'0':'q1','1':'q2'},fn:['q0']};
+        const nodes1=['q0','q1','q2','q3'];
+
+        async function sim(id) {
+            const inEl=document.getElementById(`in${id}`);const stEl=document.getElementById(`st${id}`);const inp=inEl.value;const cf=(id===1)?cf1:null;const nodes=(id===1)?nodes1:[];
+            let st='q0';rstNodes(id,nodes);upNode(id,st,true);stEl.innerText="Memproses...";stEl.style.color="#6366f1";
+            for(let c of inp){if(!cf[st][c]){stEl.innerText=`Karakter '${c}' salah!`;stEl.style.color="#ef4444";return;}await del();upNode(id,st,false);st=cf[st][c];upNode(id,st,true);stEl.innerText=`Proses '${c}' -> ${st}`;}
+            await del();if(cf.fn.includes(st)){stEl.innerText=`✅ String DITERIMA (accepted di ${st})`;stEl.style.color="#22c55e";}else{stEl.innerText=`❌ String DITOLAK (rejected di ${st})`;stEl.style.color="#ef4444";}
+        }
+        function upNode(sid,nid,act){const el=document.getElementById(`n${sid}-${nid}`);if(el)act?el.classList.add('active-node'):el.classList.remove('active-node');}
+        function rstNodes(sid,nodes){nodes.forEach(n=>upNode(sid,n,false));}
+        function del(){return new Promise(r=>setTimeout(r,600));}
+        function shTab(e,id){document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');e.currentTarget.classList.add('active');}
+    </script>
+</body>
+                          </html>
+                            
