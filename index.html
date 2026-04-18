@@ -1,156 +1,446 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tugas DFA - Asmii</title>
-    <style>
-        :root { --primary: #6366f1; --dark: #0f172a; --card-dark: #111827; --card-white: #ffffff; --text-muted: #94a3b8; --border: #e2e8f0; --border-dark: #334155; }
-        * { margin: 0; padding: 0; box-shadow: none; outline: none; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
-        body { background: #f8fafc; color: #1e293b; display: flex; justify-content: center; padding: 20px; }
-        .container { width: 100%; max-width: 480px; }
-        header { text-align: center; margin-bottom: 25px; }
-        .badge { background: var(--dark); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.7em; margin-bottom: 15px; display: inline-block; }
-        
-        /* TABS NAVIGASI */
-        .tabs { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 25px; }
-        .tab-btn { flex: 1; padding: 15px; background: none; border: none; color: var(--text-muted); cursor: pointer; font-weight: 600; text-align: center; transition: 0.2s; }
-        .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); margin-bottom: -3px; }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* CARD SYSTEM */
-        .card { border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); }
-        .card-dark { background: var(--card-dark); color: #e2e8f0; border: 1px solid var(--border-dark); }
-        .card-white { background: var(--card-white); color: #1e293b; }
-        
-        /* JUDUL KOTAK */
-        .card-title-prefix { color: var(--primary); font-weight: bold; margin-right: 5px; }
-        .card-label { font-size: 0.75em; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; }
-        .card-label::before { content: ""; display: inline-block; width: 4px; height: 18px; background: var(--primary); border-radius: 4px; margin-right: 10px; }
-
-        .specs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-        .spec-box { background: var(--dark); color: #e2e8f0; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-dark); font-family: monospace; font-size: 0.85em; }
-
-        /* DIAGRAM BOX */
-        .diag-box { text-align: center; background: #f8fafc; padding: 10px; border-radius: 12px; margin-top: 10px; border: 1px solid var(--border); }
-        .node { fill: white; stroke: #4a5568; stroke-width: 2; transition: 0.4s; }
-        .final-node { fill: none; stroke: #4a5568; stroke-width: 1; }
-        .active-node { fill: #fbbf24 !important; stroke: #d97706 !important; filter: drop-shadow(0 0 10px #fbbf24); }
-        .label { fill: #1e293b; font-weight: bold; text-anchor: middle; font-size: 14px; pointer-events: none; }
-
-        /* TABLE SYSTEM */
-        .table-container { overflow-x: auto; margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
-        th { background: #1e293b; color: white; padding: 12px 10px; text-align: left; }
-        td { padding: 15px 10px; border-bottom: 1px solid #f1f5f9; font-weight: 500; }
-        
-        /* TAGS */
-        .tag { font-size: 0.75em; padding: 3px 10px; border-radius: 6px; font-weight: bold; margin-left: 10px; display: inline-flex; align-items: center; }
-        .start { background: #e0e7ff; color: #4338ca; }
-        .final { background: #dcfce7; color: #15803d; }
-
-        /* SIMULASI */
-        .sim-input-group { display: flex; gap: 10px; margin-top: 10px; }
-        input { flex: 1; padding: 15px; border-radius: 10px; border: 1px solid var(--border-dark); background: var(--dark); color: white; font-size: 1em; }
-        input:focus { border-color: var(--primary); }
-        button { background: var(--primary); color: white; border: none; padding: 0 30px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1em; }
-        button:hover { background: #4f46e5; }
-        .status { margin-top: 15px; padding: 15px; background: var(--dark); border-radius: 10px; text-align: center; font-size: 0.9em; border: 1px dashed var(--border-dark); color: var(--text-muted); font-weight: 600; min-height: 20px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tugas Simulasi DFA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Lora:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f172a;--navy2:#1e293b;--navy3:#334155;
+  --purple:#6366f1;--purple-light:#e0e7ff;--purple-dark:#4338ca;
+  --green:#10b981;--green-light:#d1fae5;
+  --red:#ef4444;--red-light:#fee2e2;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;--bg:#f8fafc;
+  --card:#ffffff;--radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hero{background:var(--navy);color:#fff;padding:3rem 1.5rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,#312e81 0%,transparent 70%);pointer-events:none}
+.hero-tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:rgba(99,102,241,.25);color:#a5b4fc;border:1px solid rgba(165,180,252,.3);border-radius:20px;padding:4px 14px;margin-bottom:1rem;position:relative}
+.hero h1{font-size:clamp(1.35rem,4vw,1.9rem);font-weight:600;color:#f1f5f9;position:relative;line-height:1.3}
+.hero h1 em{font-style:italic;font-family:'Lora',serif;color:#a5b4fc}
+.identity{display:flex;gap:2rem;justify-content:center;margin-top:1.1rem;font-size:13px;color:#94a3b8;position:relative;flex-wrap:wrap}
+.identity span{color:#e2e8f0;font-weight:500}
+.tab-bar{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.tab-inner{max-width:880px;margin:0 auto;display:flex;padding:0 1.5rem;overflow-x:auto}
+.tab{padding:14px 20px;font-size:13px;font-weight:500;cursor:pointer;color:var(--muted);border:none;background:transparent;border-bottom:3px solid transparent;margin-bottom:-1px;transition:color .2s;white-space:nowrap;flex-shrink:0}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--purple);border-bottom-color:var(--purple)}
+.content{max-width:880px;margin:0 auto;padding:2rem 1.5rem}
+.pane{display:none;animation:fadeUp .3s ease}.pane.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.25rem}
+.card-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.card-title::before{content:'';display:block;width:3px;height:14px;background:var(--purple);border-radius:2px;flex-shrink:0}
+.soal{background:var(--navy);color:#e2e8f0;border-radius:var(--radius);padding:1.25rem 1.5rem;margin-bottom:1.25rem;font-size:14px;line-height:1.8;border-left:4px solid var(--purple)}
+.soal strong{color:#f1f5f9;font-weight:600}
+.soal em{font-family:'Lora',serif;color:#a5b4fc}
+.props{display:flex;flex-wrap:wrap;gap:6px;margin-top:.75rem}
+.prop{background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:6px;padding:3px 10px;font-size:12px;font-family:'DM Mono',monospace;color:#c7d2fe}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{background:var(--navy);color:#94a3b8;padding:10px 20px;text-align:center;font-weight:500;font-size:12px;letter-spacing:.04em}
+th:first-child{text-align:left}
+td{border-bottom:1px solid var(--border);padding:10px 20px;text-align:center;font-family:'DM Mono',monospace;font-size:13px;transition:background .15s}
+td:first-child{text-align:left;font-weight:500;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f8fafc}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;margin-left:5px;font-weight:600;font-family:'DM Sans',sans-serif;vertical-align:middle}
+.badge.s{background:var(--purple-light);color:var(--purple-dark)}
+.badge.f{background:var(--green-light);color:#065f46}
+.diagram-wrap{background:#f8fafc;border-radius:10px;border:1px solid var(--border);overflow:hidden}
+svg.dfa{width:100%;height:auto;display:block;padding:10px}
+.sim-card{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:var(--radius);padding:1.5rem;color:#e2e8f0;border:1px solid #334155}
+.sim-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#475569;margin-bottom:.75rem}
+.sim-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.sim-row input{flex:1;min-width:140px;height:42px;padding:0 16px;font-size:14px;font-family:'DM Mono',monospace;border:1.5px solid #334155;border-radius:8px;background:#1e293b;color:#f1f5f9;outline:none;transition:border-color .2s;letter-spacing:.05em}
+.sim-row input:focus{border-color:var(--purple)}
+.sim-row input::placeholder{color:#475569;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:0}
+.btn-run{height:42px;padding:0 22px;font-size:13px;font-weight:600;background:var(--purple);color:#fff;border:none;border-radius:8px;cursor:pointer;transition:background .2s,transform .1s}
+.btn-run:hover{background:var(--purple-dark)}
+.btn-run:active{transform:scale(.97)}
+.btn-reset{height:42px;padding:0 16px;font-size:13px;background:transparent;color:#94a3b8;border:1.5px solid #334155;border-radius:8px;cursor:pointer;transition:color .2s,border-color .2s}
+.btn-reset:hover{color:#e2e8f0;border-color:#475569}
+.track{display:flex;flex-wrap:wrap;gap:4px;align-items:center;min-height:32px;margin-bottom:10px}
+.st{font-size:12px;padding:4px 12px;border-radius:20px;background:#1e293b;border:1.5px solid #334155;color:#64748b;font-family:'DM Mono',monospace;transition:all .3s ease}
+.st.active{background:var(--purple);border-color:var(--purple);color:#fff;box-shadow:0 0 14px rgba(99,102,241,.55);transform:scale(1.1)}
+.st.visited{background:#1e293b;border-color:#334155;color:#475569}
+.sep{font-size:11px;color:#475569;font-family:'DM Mono',monospace}
+.result{font-size:14px;font-weight:600;padding:8px 16px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;margin-top:2px;transition:all .4s}
+.result.accept{background:var(--green-light);color:#065f46}
+.result.reject{background:var(--red-light);color:#991b1b}
+.result.idle{background:transparent;color:#475569;font-weight:400;font-size:13px;padding:0}
+.rdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.result.accept .rdot{background:var(--green)}
+.result.reject .rdot{background:var(--red)}
+@media(max-width:520px){
+  .identity{gap:.8rem}
+  .tab{padding:12px 12px;font-size:12px}
+  .content{padding:1.2rem .9rem}
+  .card{padding:1.1rem}
+  .sim-card{padding:1.1rem}
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="badge">TEORI BAHASA & AUTOMATA</div>
-            <p>Nama: <strong>Hasmiranti Dewi Pratiwi A</strong> | NIM: <strong>151</strong></p>
-        </header>
 
-        <div class="tabs">
-            <button class="tab-btn active" onclick="shTab(event, 's1')">Soal 1</button>
-            <button class="tab-btn" onclick="shTab(event, 's2')">Soal 2</button>
-            <button class="tab-btn" onclick="shTab(event, 's3')">Soal 3</button>
-        </div>
+<div class="hero">
+  <div class="hero-tag">Teori Bahasa &amp; Automata</div>
+  <h1>Tugas 2 — <em>Deterministic Finite Automata</em></h1>
+  <div class="identity">
+    Nama:&nbsp;<span>Ninis Annisa Yunus</span>&nbsp;&nbsp;|&nbsp;&nbsp;NIM:&nbsp;<span>60200124121</span>
+  </div>
+</div>
 
-        <div id="s1" class="tab-content active">
-            <div class="card card-dark">
-                <h3>Soal 1. Buatlah tabel transisi dari Deterministic Finite Automata berikut.</h3>
-                <div class="specs">
-                    <div class="spec-box">Q = {q₀, q₁, q₂, q₃}</div>
-                    <div class="spec-box">Σ = {0, 1}</div>
-                    <div class="spec-box">S = q₀</div>
-                    <div class="spec-box">F = {q₀}</div>
-                </div>
-            </div>
-            
-            <div class="card card-white">
-                <div class="card-label">DIAGRAM TRANSISI (SOAL)</div>
-                <div class="diag-box">
-                    <svg viewBox="0 0 400 240" width="100%">
-                        <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4a5568" /></marker></defs>
-                        <path d="M 125 70 L 275 70" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <path d="M 275 90 L 125 90" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <path d="M 100 95 L 100 165" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <path d="M 120 165 L 120 95" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <path d="M 280 95 L 280 165" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <path d="M 300 165 L 300 95" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <path d="M 125 180 L 275 180" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <path d="M 275 200 L 125 200" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <path d="M 50 70 L 70 70" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arr)" fill="none" />
-                        <circle id="n1-q0" cx="100" cy="70" r="25" class="node" /><circle cx="100" cy="70" r="21" class="final-node" />
-                        <text x="100" y="75" class="label">q₀</text>
-                        <circle id="n1-q1" cx="300" cy="70" r="25" class="node" /><text x="300" y="75" class="label">q₁</text>
-                        <circle id="n1-q2" cx="100" cy="190" r="25" class="node" /><text x="100" y="195" class="label">q₂</text>
-                        <circle id="n1-q3" cx="300" cy="190" r="25" class="node" /><text x="300" y="195" class="label">q₃</text>
-                    </svg>
-                </div>
-            </div>
+<div class="tab-bar">
+  <div class="tab-inner">
+    <button class="tab active" onclick="switchTab(0)">Soal 1</button>
+    <button class="tab" onclick="switchTab(1)">Soal 2</button>
+    <button class="tab" onclick="switchTab(2)">Soal 3</button>
+  </div>
+</div>
 
-            <div class="card card-white">
-                <div class="card-label">TABEL TRANSISI (JAWABAN)</div>
-                <div class="table-container">
-                    <table>
-                        <thead><tr><th>δ</th><th>0</th><th>1</th></tr></thead>
-                        <tbody>
-                            <tr><td>→ q₀ <span class="tag start">start</span> <span class="tag final">final</span></td><td>q₂</td><td>q₁</td></tr>
-                            <tr><td>q₁</td><td>q₃</td><td>q₀</td></tr>
-                            <tr><td>q₂</td><td>q₀</td><td>q₃</td></tr>
-                            <tr><td>q₃</td><td>q₁</td><td>q₂</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<div class="content">
 
-            <div class="card card-dark">
-                <div class="sim-input-group">
-                    <input type="text" id="in1" placeholder="Masukkan string 0/1...">
-                    <button onclick="sim(1)">Mulai</button>
-                </div>
-                <div id="st1" class="status">Status: Menunggu Input...</div>
-            </div>
-        </div>
-
-        <div id="s2" class="tab-content"><div class="card-dark card"><h3>Isi Soal 2...</h3></div></div>
-        <div id="s3" class="tab-content"><div class="card-dark card"><h3>Isi Soal 3...</h3></div></div>
+  <!-- ══ SOAL 1 ══ -->
+  <div class="pane active" id="pane0">
+    <div class="soal">
+      <strong>Soal 1.</strong> Buatlah tabel transisi dari <em>Deterministic Finite Automata</em> berikut.
+      <div class="props">
+        <span class="prop">Q = {q₀, q₁, q₂, q₃}</span>
+        <span class="prop">Σ = {0, 1}</span>
+        <span class="prop">S = q₀</span>
+        <span class="prop">F = {q₀}</span>
+      </div>
     </div>
+    <div class="card">
+      <div class="card-title">Diagram Transisi (soal)</div>
+      <div class="diagram-wrap"><svg class="dfa" id="svg0" viewBox="0 0 560 310" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Tabel Transisi (jawaban)</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>δ</th><th>0</th><th>1</th></tr></thead>
+          <tbody>
+            <tr><td>→ q₀ <span class="badge s">start</span><span class="badge f">final</span></td><td>q₂</td><td>q₁</td></tr>
+            <tr><td>&nbsp;&nbsp;&nbsp;q₁</td><td>q₃</td><td>q₀</td></tr>
+            <tr><td>&nbsp;&nbsp;&nbsp;q₂</td><td>q₀</td><td>q₃</td></tr>
+            <tr><td>&nbsp;&nbsp;&nbsp;q₃</td><td>q₁</td><td>q₂</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sim-card">
+      <div class="sim-label">Simulasi String</div>
+      <div class="sim-row">
+        <input type="text" id="inp0" placeholder="Masukkan string, contoh: 1010" maxlength="24">
+        <button class="btn-run" onclick="runSim(0)">▶ Mulai Simulasi</button>
+        <button class="btn-reset" onclick="resetSim(0)">Ulangi</button>
+      </div>
+      <div class="track" id="steps0"></div>
+      <div id="result0" class="result idle">Masukkan string binary lalu klik Mulai Simulasi</div>
+    </div>
+  </div>
 
-    <script>
-        const cf1 = {q0:{'0':'q2','1':'q1'},q1:{'0':'q3','1':'q0'},q2:{'0':'q0','1':'q3'},q3:{'0':'q1','1':'q2'},fn:['q0']};
-        const nodes1=['q0','q1','q2','q3'];
+  <!-- ══ SOAL 2 ══ -->
+  <div class="pane" id="pane1">
+    <div class="soal">
+      <strong>Soal 2.</strong> Gambarkan diagram transisi dari <em>Deterministic Finite Automata</em> berikut.
+      <div class="props">
+        <span class="prop">Q = {q₀, q₁, q₂}</span>
+        <span class="prop">Σ = {a, b}</span>
+        <span class="prop">S = q₀</span>
+        <span class="prop">F = {q₀}</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Tabel Transisi (soal)</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>δ</th><th>a</th><th>b</th></tr></thead>
+          <tbody>
+            <tr><td>→ q₀ <span class="badge s">start</span><span class="badge f">final</span></td><td>q₁</td><td>q₂</td></tr>
+            <tr><td>&nbsp;&nbsp;&nbsp;q₁</td><td>q₂</td><td>q₀</td></tr>
+            <tr><td>&nbsp;&nbsp;&nbsp;q₂</td><td>q₂</td><td>q₂</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Diagram Transisi (jawaban)</div>
+      <div class="diagram-wrap"><svg class="dfa" id="svg1" viewBox="0 0 600 230" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    </div>
+    <div class="sim-card">
+      <div class="sim-label">Simulasi String</div>
+      <div class="sim-row">
+        <input type="text" id="inp1" placeholder="Masukkan string, contoh: abba" maxlength="24">
+        <button class="btn-run" onclick="runSim(1)">▶ Mulai Simulasi</button>
+        <button class="btn-reset" onclick="resetSim(1)">Ulangi</button>
+      </div>
+      <div class="track" id="steps1"></div>
+      <div id="result1" class="result idle">Masukkan string lalu klik Mulai Simulasi</div>
+    </div>
+  </div>
 
-        async function sim(id) {
-            const inEl=document.getElementById(`in${id}`);const stEl=document.getElementById(`st${id}`);const inp=inEl.value;const cf=(id===1)?cf1:null;const nodes=(id===1)?nodes1:[];
-            let st='q0';rstNodes(id,nodes);upNode(id,st,true);stEl.innerText="Memproses...";stEl.style.color="#6366f1";
-            for(let c of inp){if(!cf[st][c]){stEl.innerText=`Karakter '${c}' salah!`;stEl.style.color="#ef4444";return;}await del();upNode(id,st,false);st=cf[st][c];upNode(id,st,true);stEl.innerText=`Proses '${c}' -> ${st}`;}
-            await del();if(cf.fn.includes(st)){stEl.innerText=`✅ String DITERIMA (accepted di ${st})`;stEl.style.color="#22c55e";}else{stEl.innerText=`❌ String DITOLAK (rejected di ${st})`;stEl.style.color="#ef4444";}
+  <!-- ══ SOAL 3 ══ -->
+  <div class="pane" id="pane2">
+    <div class="soal">
+      <strong>Soal 3.</strong> Gambarkan diagram transisi dari <em>Deterministic Finite Automata</em> berikut.
+      <div class="props">
+        <span class="prop">Q = {q₀, q₁, q₂, q₃}</span>
+        <span class="prop">Σ = {a, b}</span>
+        <span class="prop">S = q₀</span>
+        <span class="prop">F = {q₀, q₁, q₂}</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Tabel Transisi (soal)</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>δ</th><th>a</th><th>b</th></tr></thead>
+          <tbody>
+            <tr><td>→ q₀ <span class="badge s">start</span><span class="badge f">final</span></td><td>q₀</td><td>q₁</td></tr>
+            <tr><td>&nbsp;&nbsp;&nbsp;q₁ <span class="badge f">final</span></td><td>q₀</td><td>q₂</td></tr>
+            <tr><td>&nbsp;&nbsp;&nbsp;q₂ <span class="badge f">final</span></td><td>q₀</td><td>q₃</td></tr>
+            <tr><td>&nbsp;&nbsp;&nbsp;q₃</td><td>q₃</td><td>q₂</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Diagram Transisi (jawaban)</div>
+      <div class="diagram-wrap"><svg class="dfa" id="svg2" viewBox="0 0 700 270" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    </div>
+    <div class="sim-card">
+      <div class="sim-label">Simulasi String</div>
+      <div class="sim-row">
+        <input type="text" id="inp2" placeholder="Masukkan string, contoh: abb" maxlength="24">
+        <button class="btn-run" onclick="runSim(2)">▶ Mulai Simulasi</button>
+        <button class="btn-reset" onclick="resetSim(2)">Ulangi</button>
+      </div>
+      <div class="track" id="steps2"></div>
+      <div id="result2" class="result idle">Masukkan string lalu klik Mulai Simulasi</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ══ DFA DATA ══ */
+const DFAs=[
+  {// Soal 1 — alfabet {0,1}, start=q₀, final={q₀}
+   states:['q₀','q₁','q₂','q₃'],alpha:['0','1'],start:0,finals:[0],
+   delta:{'q₀':{'0':'q₂','1':'q₁'},'q₁':{'0':'q₃','1':'q₀'},'q₂':{'0':'q₀','1':'q₃'},'q₃':{'0':'q₁','1':'q₂'}}
+  },
+  {// Soal 2 — alfabet {a,b}, start=q₀, final={q₀}
+   states:['q₀','q₁','q₂'],alpha:['a','b'],start:0,finals:[0],
+   delta:{'q₀':{'a':'q₁','b':'q₂'},'q₁':{'a':'q₂','b':'q₀'},'q₂':{'a':'q₂','b':'q₂'}}
+  },
+  {// Soal 3 — alfabet {a,b}, start=q₀, final={q₀,q₁,q₂}
+   states:['q₀','q₁','q₂','q₃'],alpha:['a','b'],start:0,finals:[0,1,2],
+   delta:{'q₀':{'a':'q₀','b':'q₁'},'q₁':{'a':'q₀','b':'q₂'},'q₂':{'a':'q₀','b':'q₃'},'q₃':{'a':'q₃','b':'q₂'}}
+  }
+];
+
+/* ══ TABS ══ */
+function switchTab(i){
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
+  document.querySelectorAll('.pane').forEach((p,j)=>p.classList.toggle('active',i===j));
+  resetSim(i);
+}
+
+/* ══ SIMULATION ══ */
+let timers=[];
+function clearT(){timers.forEach(clearTimeout);timers=[];}
+
+function runSim(i){
+  clearT();
+  const inp=document.getElementById('inp'+i).value.trim().toLowerCase();
+  const dfa=DFAs[i];
+  const el=document.getElementById('result'+i);
+  if(!inp){el.className='result idle';el.innerHTML='Masukkan string terlebih dahulu';return;}
+  const bad=inp.split('').find(c=>!dfa.alpha.includes(c));
+  if(bad){
+    el.className='result reject';
+    el.innerHTML='<span class="rdot"></span>Karakter "'+bad+'" tidak valid. Gunakan: '+dfa.alpha.join(', ');
+    return;
+  }
+  let cur=dfa.states[dfa.start];
+  const seq=[cur];
+  for(const ch of inp){cur=dfa.delta[cur][ch];seq.push(cur);}
+
+  const track=document.getElementById('steps'+i);
+  track.innerHTML='';
+  el.className='result idle';el.innerHTML='Menjalankan simulasi...';
+
+  const badges=[];
+  const b0=mkBadge(seq[0]);track.appendChild(b0);badges.push(b0);
+  for(let j=0;j<inp.length;j++){
+    const sep=document.createElement('span');
+    sep.className='sep';sep.textContent='—'+inp[j]+'→';
+    track.appendChild(sep);
+    const b=mkBadge(seq[j+1]);track.appendChild(b);badges.push(b);
+  }
+
+  hlState(i,dfa.states[dfa.start]);
+  badges[0].classList.add('active');
+
+  for(let j=0;j<inp.length;j++){
+    (function(j){
+      const t=setTimeout(()=>{
+        badges[j].classList.remove('active');badges[j].classList.add('visited');
+        badges[j+1].classList.add('active');
+        hlState(i,seq[j+1]);
+        if(j===inp.length-1){
+          const ok=dfa.finals.includes(dfa.states.indexOf(seq[j+1]));
+          const el2=document.getElementById('result'+i);
+          el2.className='result '+(ok?'accept':'reject');
+          el2.innerHTML='<span class="rdot"></span>String <strong>'+(ok?'DITERIMA (accepted)':'DITOLAK (rejected)')+'</strong>';
         }
-        function upNode(sid,nid,act){const el=document.getElementById(`n${sid}-${nid}`);if(el)act?el.classList.add('active-node'):el.classList.remove('active-node');}
-        function rstNodes(sid,nodes){nodes.forEach(n=>upNode(sid,n,false));}
-        function del(){return new Promise(r=>setTimeout(r,600));}
-        function shTab(e,id){document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');e.currentTarget.classList.add('active');}
-    </script>
+      },(j+1)*650);
+      timers.push(t);
+    })(j);
+  }
+}
+
+function mkBadge(label){
+  const s=document.createElement('span');s.className='st';s.textContent=label;return s;
+}
+function resetSim(i){
+  clearT();
+  if(document.getElementById('inp'+i)) document.getElementById('inp'+i).value='';
+  if(document.getElementById('steps'+i)) document.getElementById('steps'+i).innerHTML='';
+  const el=document.getElementById('result'+i);
+  if(el){el.className='result idle';el.textContent='Masukkan string lalu klik Mulai Simulasi';}
+  hlState(i,null);
+}
+function hlState(soal,name){
+  const svg=document.getElementById('svg'+soal);if(!svg)return;
+  svg.querySelectorAll('[data-state]').forEach(g=>{
+    const c=g.querySelector('.sbg');if(!c)return;
+    const on=g.getAttribute('data-state')===name;
+    c.setAttribute('fill',on?'#e0e7ff':'#ffffff');
+    c.setAttribute('stroke',on?'#6366f1':'#475569');
+    c.setAttribute('stroke-width',on?'3.5':'1.5');
+  });
+}
+
+/* ══ SVG HELPERS ══ */
+const NS='http://www.w3.org/2000/svg';
+function E(tag,a,txt){
+  const e=document.createElementNS(NS,tag);
+  for(const k in a)e.setAttribute(k,a[k]);
+  if(txt!==undefined)e.textContent=txt;
+  return e;
+}
+function addMark(svg){
+  let d=svg.querySelector('defs');if(!d){d=E('defs',{});svg.appendChild(d);}
+  const mid='m'+svg.id;
+  const m=E('marker',{id:mid,markerWidth:'9',markerHeight:'9',refX:'7',refY:'3',orient:'auto'});
+  m.appendChild(E('path',{d:'M0,0 L0,6 L9,3 z',fill:'#64748b'}));
+  d.appendChild(m);return mid;
+}
+function lbl(svg,x,y,text){
+  const t=E('text',{x,y,'font-size':'12.5','font-family':'DM Mono,monospace','text-anchor':'middle','dominant-baseline':'middle',fill:'#334155'});
+  t.textContent=text;svg.appendChild(t);
+}
+function arrowLine(svg,mid,x1,y1,x2,y2,text,curve,lx_off,ly_off){
+  const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy);
+  const ux=dx/len,uy=dy/len,R=26;
+  const sx=x1+ux*R,sy=y1+uy*R,ex=x2-ux*R,ey=y2-uy*R;
+  let d,lx,ly;
+  if(curve){
+    const mx=(sx+ex)/2,my=(sy+ey)/2,px=-uy*curve,py=ux*curve;
+    d=`M${sx},${sy} Q${mx+px},${my+py} ${ex},${ey}`;
+    lx=mx+px*0.55+(lx_off||0);ly=my+py*0.55+(ly_off||0);
+  } else {
+    d=`M${sx},${sy} L${ex},${ey}`;
+    lx=(sx+ex)/2+(lx_off||0);ly=(sy+ey)/2+(ly_off||-10);
+  }
+  svg.appendChild(E('path',{d,stroke:'#64748b','stroke-width':'1.5',fill:'none','marker-end':'url(#'+mid+')'}));
+  lbl(svg,lx,ly,text);
+}
+function selfLoop(svg,mid,cx,cy,text,angleDeg){
+  const rad=angleDeg*Math.PI/180,r=26,lp=36;
+  const ax=cx+Math.cos(rad)*r,ay=cy+Math.sin(rad)*r;
+  const bx=cx+Math.cos(rad+0.85)*r,by=cy+Math.sin(rad+0.85)*r;
+  const cpx=cx+Math.cos(rad+0.42)*(r+lp),cpy=cy+Math.sin(rad+0.42)*(r+lp);
+  svg.appendChild(E('path',{d:`M${ax},${ay} Q${cpx},${cpy} ${bx},${by}`,stroke:'#64748b','stroke-width':'1.5',fill:'none','marker-end':'url(#'+mid+')'}));
+  const lx=cx+Math.cos(rad+0.42)*(r+lp+18),ly=cy+Math.sin(rad+0.42)*(r+lp+18);
+  lbl(svg,lx,ly,text);
+}
+function state(svg,cx,cy,label,isStart,isFinal){
+  if(isStart){
+    svg.appendChild(E('line',{x1:cx-60,y1:cy,x2:cx-28,y2:cy,stroke:'#64748b','stroke-width':'1.5','marker-end':'url(#m'+svg.id+')'}));
+  }
+  const g=E('g',{'data-state':label});
+  const bg=E('circle',{cx,cy,r:26,fill:'#ffffff',stroke:'#475569','stroke-width':'1.5'});
+  bg.classList.add('sbg');g.appendChild(bg);
+  if(isFinal) g.appendChild(E('circle',{cx,cy,r:20,fill:'none',stroke:'#475569','stroke-width':'1'}));
+  const t=E('text',{x:cx,y:cy,'font-size':'13.5','font-family':'DM Mono,monospace','font-weight':'500','text-anchor':'middle','dominant-baseline':'middle',fill:'#1e293b'});
+  t.textContent=label;g.appendChild(t);svg.appendChild(g);
+}
+
+/* ══ SVG 0: Soal 1 ══
+   Transitions: q0-0->q2, q0-1->q1, q1-0->q3, q1-1->q0,
+                q2-0->q0, q2-1->q3, q3-0->q1, q3-1->q2     */
+function drawSVG0(){
+  const s=document.getElementById('svg0'),mid=addMark(s);
+  const q0={x:160,y:110},q1={x:400,y:110},q2={x:160,y:250},q3={x:400,y:250};
+  arrowLine(s,mid,q0.x,q0.y,q1.x,q1.y,'1',-32,0,-15);
+  arrowLine(s,mid,q1.x,q1.y,q0.x,q0.y,'1',-32,0,14);
+  arrowLine(s,mid,q0.x,q0.y,q2.x,q2.y,'0',0,-16,0);
+  arrowLine(s,mid,q2.x,q2.y,q0.x,q0.y,'0',0,16,0);
+  arrowLine(s,mid,q1.x,q1.y,q3.x,q3.y,'0',0,-16,0);
+  arrowLine(s,mid,q3.x,q3.y,q1.x,q1.y,'0',0,16,0);
+  arrowLine(s,mid,q2.x,q2.y,q3.x,q3.y,'1',-32,0,-15);
+  arrowLine(s,mid,q3.x,q3.y,q2.x,q2.y,'1',-32,0,14);
+  state(s,q0.x,q0.y,'q₀',true,true);
+  state(s,q1.x,q1.y,'q₁',false,false);
+  state(s,q2.x,q2.y,'q₂',false,false);
+  state(s,q3.x,q3.y,'q₃',false,false);
+}
+
+/* ══ SVG 1: Soal 2 ══
+   q0-a->q1, q0-b->q2, q1-a->q2, q1-b->q0, q2-a->q2, q2-b->q2  */
+function drawSVG1(){
+  const s=document.getElementById('svg1'),mid=addMark(s);
+  const q0={x:120,y:115},q1={x:310,y:115},q2={x:500,y:115};
+  arrowLine(s,mid,q0.x,q0.y,q1.x,q1.y,'a',-34,0,-15);
+  arrowLine(s,mid,q1.x,q1.y,q0.x,q0.y,'b',-34,0,14);
+  arrowLine(s,mid,q0.x,q0.y,q2.x,q2.y,'b',68,0,-18);
+  arrowLine(s,mid,q1.x,q1.y,q2.x,q2.y,'a',-34,0,-15);
+  selfLoop(s,mid,q2.x,q2.y,'a, b',-90);
+  state(s,q0.x,q0.y,'q₀',true,true);
+  state(s,q1.x,q1.y,'q₁',false,false);
+  state(s,q2.x,q2.y,'q₂',false,false);
+}
+
+/* ══ SVG 2: Soal 3 ══
+   q0-a->q0(loop), q0-b->q1, q1-a->q0, q1-b->q2,
+   q2-a->q0, q2-b->q3, q3-a->q3(loop), q3-b->q2        */
+function drawSVG2(){
+  const s=document.getElementById('svg2'),mid=addMark(s);
+  const q0={x:110,y:135},q1={x:280,y:135},q2={x:450,y:135},q3={x:620,y:135};
+  selfLoop(s,mid,q0.x,q0.y,'a',-90);
+  arrowLine(s,mid,q0.x,q0.y,q1.x,q1.y,'b',-32,0,-15);
+  arrowLine(s,mid,q1.x,q1.y,q0.x,q0.y,'a',-32,0,14);
+  arrowLine(s,mid,q1.x,q1.y,q2.x,q2.y,'b',-32,0,-15);
+  arrowLine(s,mid,q2.x,q2.y,q0.x,q0.y,'a',-62,0,18);
+  arrowLine(s,mid,q2.x,q2.y,q3.x,q3.y,'b',-32,0,-15);
+  arrowLine(s,mid,q3.x,q3.y,q2.x,q2.y,'b',-32,0,14);
+  selfLoop(s,mid,q3.x,q3.y,'a',-90);
+  state(s,q0.x,q0.y,'q₀',true,true);
+  state(s,q1.x,q1.y,'q₁',false,true);
+  state(s,q2.x,q2.y,'q₂',false,true);
+  state(s,q3.x,q3.y,'q₃',false,false);
+}
+
+drawSVG0();drawSVG1();drawSVG2();
+</script>
 </body>
-                          </html>
-                            
+</html>
